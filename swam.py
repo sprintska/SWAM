@@ -10,7 +10,28 @@ This is a Monte Carlo simulation script built to model expected damage
 profiles in Star Wars Armada.  It's pretty rudimentary.  If you don't 
 know Python, you should only change the variables under OPTIONS.  To add
 the effect of an upgrade, set the variable equal to 1; to remove it, set
-it to 0. The color_base variables set the number of dice in the pool.'''
+it to 0. The color_base variables set the number of dice in the pool.
+
+
+The die number-to-facing translation I'm using is:
+
+BLACK
+1-2		Blank
+3-6		Hit
+7-8		Hit/Crit
+
+BLUE
+1-2		Accuracy
+3-6		Hit
+7-8		Crit
+
+RED
+1-2		Blank
+3		Accuracy
+4-5		Hit
+6-7		Crit
+8		Double
+'''
 
 from random import *
 from math import *
@@ -23,8 +44,8 @@ tries=100000			# how many iterations to try
 cf=0					# concentrate fire available?
 trc=1					# TRC available?
 black_base=0			# number of black dice (base)
-blue_base=0				# number of blue dice (base)
-red_base=3				# number of red dice (base)
+blue_base=1				# number of blue dice (base)
+red_base=1				# number of red dice (base)
 acm=0					# ACM available?
 apt=0					# APT available?
 ackbar=0				# Ackbar available?
@@ -179,19 +200,35 @@ for x in range(tries):
 
 	#TRC
 	if trc_available:
+		
 		#look for a blank to reroll
 		for red in enumerate(reds):
 			if trc_available and (red[1] < 3):
 				reds[red[0]]=8
 				trc_available=0
+		
 		#look for a single to reroll
 		for red in enumerate(reds):
 			if (red[1] > 3) and (red[1] < 8) and trc_available:
 				reds[red[0]]=8
 				trc_available=0
-		#look for an acc to reroll if there is another one showing
+		
+		#look for an acc to reroll if there is another one showing AND
+		#the the total showing damage is 1 or less
+		dmg_showing = 0
+		for die in blacks:
+			if die > 6: dmg_showing += 2
+			elif die > 2: dmg_showing += 1
+		for blue in blues:
+			if die > 2: dmg_showing += 1
+		for red in reds:
+			if die == 8: dmg_showing += 2
+			elif die > 3: dmg_showing += 1
 		for red in enumerate(reds):
-			if (red[1] == 3) and (accuracies > 1) and trc_available:
+			if (red[1] == 3) and \
+			   ((accuracies > 1) or \
+			   (dmg_showing <= 2)) and \
+			   trc_available:
 				reds[red[0]]=8
 				trc_available=0
 				accuracies-=1 
