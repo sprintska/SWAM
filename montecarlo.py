@@ -17,16 +17,16 @@ from math import *
 
 #####OPTIONS (Set to 1 for yes, 0 for no)#####
 
-tries=1					# how many iterations to try
-cf=0					# concentrate fire available?
-trc=0					# TRC available?
-black_base=0			# number of black dice (base)
+tries=1000000			# how many iterations to try
+cf=1					# concentrate fire available?
+trc=1					# TRC available?
+black_base=2			# number of black dice (base)
 blue_base=4				# number of blue dice (base)
 red_base=4				# number of red dice (base)
-acm=0					# ACM available?
+acm=1					# ACM available?
 apt=0					# APT available?
-ackbar=0				# Ackbar available?
-oe=0					# OE available?
+ackbar=1				# Ackbar available?
+oe=1					# OE available?
 vader=0					# Vader available?
 leading_shots=0			# LS available?
 distance=0				# Range: 0 for close, 1 for medium, 2 for long
@@ -38,7 +38,8 @@ dist_override_blue=0  	# Distance override for blues (e.g., Defiant)
 # Initialize some variables
 damage_overall=0		# Total damage
 accuracies_overall=0	# How many times we got at least 1 acc
-fails_overall=0					# How many times we failed to get a black crit
+fails_overall=0			# How many times we failed to get a black crit
+if ackbar and red_base: red_base += 2 	# Ackbar hurrrr
 
 # Pretty text
 print("Rolling "+str(black_base)+" blacks, "
@@ -85,7 +86,6 @@ for x in range(tries):
 			blues.append(ceil(random()*8))
 	
 	reds=[]
-	if ackbar and red_base: red_base += 2
 	for die in range(red_base):
 		reds.append(ceil(random()*8))
 
