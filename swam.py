@@ -2,7 +2,7 @@
 #!python
 
 '''To run this script, make sure you have Python 3 installed, then type
-py path/to/script/montecarlo.py on the command line.  It was written and
+py path/to/script/swam.py on the command line.  It was written and
 tested for Python 3.4.  If you have Python 2, go get 3 and stop being a
 weiner.  If you have a newer version, hello from the distant past!
 
@@ -20,15 +20,15 @@ from os import *
 #####OPTIONS (Set to 1 for yes, 0 for no)#####
 
 tries=100000			# how many iterations to try
-cf=1					# concentrate fire available?
+cf=0					# concentrate fire available?
 trc=1					# TRC available?
-black_base=2			# number of black dice (base)
-blue_base=4				# number of blue dice (base)
-red_base=4				# number of red dice (base)
-acm=1					# ACM available?
+black_base=0			# number of black dice (base)
+blue_base=0				# number of blue dice (base)
+red_base=3				# number of red dice (base)
+acm=0					# ACM available?
 apt=0					# APT available?
-ackbar=1				# Ackbar available?
-oe=1					# OE available?
+ackbar=0				# Ackbar available?
+oe=0					# OE available?
 vader=0					# Vader available?
 leading_shots=0			# LS available?
 distance=0				# Range: 0 for close, 1 for medium, 2 for long
@@ -37,7 +37,7 @@ dist_override_blue=0  	# Distance override for blues (e.g., Defiant)
 
 ##############################################
 
-system("clear")
+#~ os.system("clear")
 
 # Initialize some variables
 damage_overall=0		# Total damage
@@ -176,6 +176,25 @@ for x in range(tries):
 				accuracy = 1
 			elif (red[1] == 3) and accuracy:
 				reds[red[0]]=ceil(random()*8)
+
+	#TRC
+	if trc_available:
+		#look for a blank to reroll
+		for red in enumerate(reds):
+			if trc_available and (red[1] < 3):
+				reds[red[0]]=8
+				trc_available=0
+		#look for a single to reroll
+		for red in enumerate(reds):
+			if (red[1] > 3) and (red[1] < 8) and trc_available:
+				reds[red[0]]=8
+				trc_available=0
+		#look for an acc to reroll if there is another one showing
+		for red in enumerate(reds):
+			if (red[1] == 3) and (accuracies > 1) and trc_available:
+				reds[red[0]]=8
+				trc_available=0
+				accuracies-=1 
 	
 	#Count damage
 	for die in reds:

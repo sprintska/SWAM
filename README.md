@@ -31,10 +31,10 @@ menu, and type cmd.exe.  This will bring you to the command line.
 
 2. At the command prompt (which will look something like 
 C:\FolderName>), type:
-py C:\path\to\script\montecarlo.py
+py C:\path\to\script\swam.py
 
 3. To change options, you currently need to edit the script directly.  
-To do this, open C:\path\to\script\montecarlo.py in Notepad and follow 
+To do this, open C:\path\to\script\swam.py in Notepad and follow 
 the directions at the top of the file.
 
 ---------------------
@@ -47,11 +47,11 @@ LINUX
 2. Put all of the SWAM files into any directory on your computer.  I'll 
 use /path/to/script/ for the instructions
 
-3. $ chmod +x /path/to/script/montecarlo.py
+3. $ chmod +x /path/to/script/swam.py
 
 -Use:
 
-1. $ /path/to/script/montecarlo.py 
+1. $ /path/to/script/swam.py 
 
 2. To change options, you currently need to edit the script directly.  
 To do this, open \path\to\script\montecarlo.py in nano or your favorite 
