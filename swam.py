@@ -54,6 +54,7 @@ configs["ackbar"]=0                # Ackbar available?
 configs["cf"]=0                    # concentrate fire available?
 configs["leading_shots"]=0         # LS available?
 configs["oe"]=0                    # OE available?
+configs["salvation"]=0			   # Salvation available?
 configs["trc"]=0                   # TRC available?
 configs["vader"]=0                 # Vader available?
 configs["dist_override_black"]=0   # Distance override for blacks (e.g., Defiant)
@@ -126,6 +127,7 @@ def accept_args(args_list,import_configs):
         elif str(arg[1]) == "--cf": import_configs["cf"]=1
         elif str(arg[1]) == "--ls": import_configs["leading_shots"]=1
         elif str(arg[1]) == "--oe": import_configs["oe"]=1
+        elif str(arg[1]) == "--salvation": import_configs["salvation"]=1
         elif str(arg[1]) == "--trc": import_configs["trc"]=1
         elif str(arg[1]) == "--vader": import_configs["vader"]=1
         elif str(arg[1]) == "--black_override": import_configs["dist_override_black"]=1
@@ -150,6 +152,7 @@ ackbar=configs["ackbar"]
 cf=configs["cf"]
 leading_shots=configs["leading_shots"]
 oe=configs["oe"]
+salvation=configs["salvation"]
 trc=configs["trc"]
 vader=configs["vader"]
 dist_override_black=configs["dist_override_black"]
@@ -173,6 +176,7 @@ if acm: print("    ACM")
 if apt: print("    APT")
 if ackbar: print("    Ackbar")
 if oe: print("    Ordnance Experts")
+if salvation: print("    Salvation")
 if vader: print("    Vader")
 if leading_shots: print("    Leading Shots")
 if distance==0: print("\nAt close range\n===============\n")
@@ -333,6 +337,7 @@ for x in range(tries):
     #Count damage
     for die in reds:
         if die > 7: damage += 2
+        elif (die > 5) and salvation: damage += 2
         elif die > 3: damage += 1
         elif die == 3: accuracy=1
 
