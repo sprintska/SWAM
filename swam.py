@@ -69,7 +69,7 @@ def soDumb():
 def accept_args(args_list,import_configs):
     for arg in enumerate(args_list):
         #~ arg=(arg[0],arg[1].lower())
-        print(arg)
+        #~ print(arg)
         if ("--help" in str(arg[1])) or (str(arg[1])=="-h"):
             print("SWAM - Star Wars Armada Modeler")
             print("Last update: 13 Feb 2016\n")
@@ -138,7 +138,7 @@ def accept_args(args_list,import_configs):
 # Read in arguments from command line
 
 configs = accept_args(sys.argv,configs)
-print("Foo: ",configs)
+#~ print("Foo: ",configs)
 
 conf_file=configs["conf_file"]
 tries=configs["tries"]
