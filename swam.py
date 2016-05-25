@@ -35,6 +35,7 @@ RED
 
 from random import *
 from math import *
+from collections import *
 import os
 import sys
 
@@ -44,6 +45,7 @@ configs = {}
 
 configs["conf_file"]=False         # use a config file
 configs["tries"]=100000            # how many iterations to try
+configs["acc_target"]=1            # how many accuracies to shoot for per shot
 configs["distance"]=0              # Range: 0 for close, 1 for medium, 2 for long
 configs["black_base"]=0            # number of black dice (base)
 configs["blue_base"]=0             # number of blue dice (base)
@@ -54,7 +56,8 @@ configs["ackbar"]=0                # Ackbar available?
 configs["cf"]=0                    # concentrate fire available?
 configs["leading_shots"]=0         # LS available?
 configs["oe"]=0                    # OE available?
-configs["salvation"]=0			   # Salvation available?
+configs["salvation"]=1             # Salvation available?
+configs["screed"]=0                # Screed available?
 configs["trc"]=0                   # TRC available?
 configs["vader"]=0                 # Vader available?
 configs["dist_override_black"]=0   # Distance override for blacks (e.g., Defiant)
@@ -71,8 +74,6 @@ def accept_args(args_list,import_configs):
         #~ arg=(arg[0],arg[1].lower())
         #~ print(arg)
         if ("--help" in str(arg[1])) or (str(arg[1])=="-h"):
-            print("SWAM - Star Wars Armada Modeler")
-            print("Last update: 13 Feb 2016\n")
             print("Usage: swam.py [option=value]")
             print("       swam.py --config filename (not implemented)\n")
             print("Options:")
@@ -80,6 +81,7 @@ def accept_args(args_list,import_configs):
             print("  -c  --config        Use options in a config file\n")
             print("  -i  --iter          Number of iterations")
             print("  -r  --range         Range to target (close|medium|long)\n")
+            print("  -at --accuracies    Target number of accuracies on each shot\n")
             print("  -ba --blacks        Number of black dice")
             print("  -bu --blues         Number of blue dice")
             print("  -re --reds          Number of red dice\n")
@@ -89,6 +91,7 @@ def accept_args(args_list,import_configs):
             print("  -cf --cf            Concentrate Fire")
             print("  -ls --ls            Leading Shots")
             print("  -oe --oe            Ordnance Experts")
+            print("  -sc --screed        Screed")
             print("  -tr --trc           Turbolaser Reroute Circuits")
             print("  -va --vader         Vader (Admiral)\n")
             print("  -ao --black_override   Distance override for blacks")
@@ -96,50 +99,127 @@ def accept_args(args_list,import_configs):
             print("Example: swam.py --config ./mc30.swm")
             print("         swam.py --iter=1000 --range=long --reds=3")
             print("         swam.py -i 1000 -r long -ba 3 -bl 2 -ab -ac")
-
+            print("\n\nSWAM - Star Wars Armada Modeler")
+            print("Last update: 5 April 2016\n")
+            print("Written by: Ardaedhel")
+            exit()
+#~ 
+#~ 
+        #~ '''configurable, non-binary paramters'''
+#~ 
         elif "--iter" in str(arg[1]):
             try: import_configs["tries"]=\
                  int((str(arg[1]).split("=",1))[1])
             except: soDumb()
+
+        elif "-i" == str(arg[1]):
+            try: import_configs["tries"]=\
+                 int(str(args_list[arg[0]+1]))
+            except: soDumb()
+
+        elif "--accuracies" in str(arg[1]):
+            try: import_configs["acc_target"]=\
+                 int((str(arg[1]).split("=",1))[1])
+            except: soDumb()
+
+        elif "-at" == str(arg[1]):
+            try: import_configs["acc_target"]=\
+                 int(str(args_list[arg[0]+1]))
+            except: soDumb()
                 
         elif "--range" in str(arg[1]):
-            try: import_configs["distance"]=\
-                 int((str(arg[1]).split("=",1))[1])
+            try:
+                if str(arg[1]).split("=",1) == "close":
+                    import_configs["distance"]=0
+                elif str(arg[1]).split("=",1) == "medium":
+                    import_configs["distance"]=1
+                elif str(arg[1]).split("=",1) == "long":
+                    import_configs["distance"]=2
+            except: soDumb()
+
+        elif "-r" == str(arg[1]):
+            try:
+                if str(args_list[arg[0]+1]) == "close":
+                    import_configs["distance"]=0
+                elif str(args_list[arg[0]+1]) == "medium":
+                    import_configs["distance"]=1
+                elif str(args_list[arg[0]+1]) == "long":
+                    import_configs["distance"]=2
             except: soDumb()
                 
         elif "--blacks" in str(arg[1]):
             try: import_configs["black_base"]=int((str(arg[1]).split("=",1))[1])
             except: soDumb()
+
+        elif "-ba" == str(arg[1]):
+            try: import_configs["black_base"]=\
+                 int(str(args_list[arg[0]+1]))
+            except:
+                soDumb()
                 
         elif "--blues" in str(arg[1]):
             try: import_configs["blue_base"]=\
                  int((str(arg[1]).split("=",1))[1])
+            except: soDumb()
+
+        elif "-bu" == str(arg[1]):
+            try: import_configs["blue_base"]=\
+                 int(str(args_list[arg[0]+1]))
             except: soDumb()
             
         elif "--reds" in str(arg[1]):
             try: import_configs["red_base"]=\
                  int((str(arg[1]).split("=",1))[1])
             except: soDumb
-            
-        elif str(arg[1]) == "--ackbar": import_configs["ackbar"]=1
-        elif str(arg[1]) == "--acm": import_configs["acm"]=1
-        elif str(arg[1]) == "--apt": import_configs["apt"]=1
-        elif str(arg[1]) == "--cf": import_configs["cf"]=1
-        elif str(arg[1]) == "--ls": import_configs["leading_shots"]=1
-        elif str(arg[1]) == "--oe": import_configs["oe"]=1
-        elif str(arg[1]) == "--salvation": import_configs["salvation"]=1
-        elif str(arg[1]) == "--trc": import_configs["trc"]=1
-        elif str(arg[1]) == "--vader": import_configs["vader"]=1
-        elif str(arg[1]) == "--black_override": import_configs["dist_override_black"]=1
-        elif str(arg[1]) == "--blue_override": import_configs["dist_override_blue"]=1
-        
+
+        elif "-re" == str(arg[1]):
+            try: import_configs["red_base"]=\
+                 int(str(args_list[arg[0]+1]))
+            except: soDumb()
+
+        '''
+        binary (yes or no) options:
+        this list ties all command line flags (item[0]) to their
+        associated variable
+        '''
+
+        nonbinary_options = [
+            ("--ackbar","ackbar"),
+            ("-ab","ackbar"),
+            ("--acm","acm"),
+            ("-ac","acm"),
+            ("--apt","apt"),
+            ("-ap","apt"),
+            ("--cf","cf"),
+            ("-cf","cf"),
+            ("--ls","leading_shots"),
+            ("-ls","leading_shots"),
+            ("--oe","oe"),
+            ("-oe","oe"),
+            ("--screed","screed"),
+            ("-sc","screed"),
+            ("--trc","trc"),
+            ("-tr","trc"),
+            ("--salvation","salvation"),
+            ("-sa","salvation"),
+            ("--vader","vader"),
+            ("-va","vader"),
+            ("--black_override","dist_override_black"),
+            ("-ao","dist_override_black"),
+            ("--blue_override","dist_override_blue"),
+            ("-uo","dist_override_blue")
+            ]
+
+        for args_set in nonbinary_options:
+            if str(arg[1]) == str(args_set[0]): import_configs[str(args_set[1])]=1
+                
     return import_configs
 
 # Read in arguments from command line
 
 configs = accept_args(sys.argv,configs)
-#~ print("Foo: ",configs)
 
+acc_target=configs["acc_target"]
 conf_file=configs["conf_file"]
 tries=configs["tries"]
 distance=configs["distance"]
@@ -153,6 +233,7 @@ cf=configs["cf"]
 leading_shots=configs["leading_shots"]
 oe=configs["oe"]
 salvation=configs["salvation"]
+screed=configs["screed"]
 trc=configs["trc"]
 vader=configs["vader"]
 dist_override_black=configs["dist_override_black"]
@@ -177,6 +258,7 @@ if apt: print("    APT")
 if ackbar: print("    Ackbar")
 if oe: print("    Ordnance Experts")
 if salvation: print("    Salvation")
+if screed: print("    Screed")
 if vader: print("    Vader")
 if leading_shots: print("    Leading Shots")
 if distance==0: print("\nAt close range\n===============\n")
@@ -216,6 +298,7 @@ for x in range(tries):
     
 ###BLACKS###
 #CF if available and fishing for an APT/ACM crit
+
     if (acm or apt):    
         for x in blacks:
             if x > 6: crit=1
@@ -224,21 +307,36 @@ for x in range(tries):
             blacks.append(ceil(random()*8))
             cf_spent=1
 
-
 #OE reroll logic
 
     if oe:
-        for x in blacks:
-            if x > 6: crit=1
 
-        if (acm or apt) and not crit:
+        # roll aggressively if we have Vader as a backup
+        if vader:
             for black in enumerate(blacks):
-                blacks[black[0]]=ceil(random()*8)
+                if black[1] < 7:
+                    blacks[black[0]]=ceil(random()*8)
+
+        # roll aggressively if we have Screed and enough dice to burn
+        elif (screed and (len(blacks) + len(blues) + len(reds) >1)):
+            for black in enumerate(blacks):
+                if black[1] < 7:
+                    blacks[black[0]]=ceil(random()*8)
 
         else:
-            for black in enumerate(blacks):
-                if black[1] < 3:
+            for x in blacks:
+                if x > 6: crit=1
+
+            if (acm or apt) and not crit:
+                # roll aggressively if we have to fish for crits
+                for black in enumerate(blacks):
                     blacks[black[0]]=ceil(random()*8)
+
+            else:
+                for black in enumerate(blacks):
+                    if black[1] < 3:
+                        blacks[black[0]]=ceil(random()*8)
+
 
 #Black damage total
 
