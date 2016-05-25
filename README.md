@@ -3,10 +3,7 @@ Star Wars Armada Modeler
 
 This is a Monte Carlo simulation script built to model expected damage 
 profiles in Star Wars Armada.  It's pretty rudimentary--like, it's in 
-alpha and will probably never leave it.  If you don't know Python, you 
-should only change the variables under OPTIONS.  To add the effect of 
-an upgrade, set the variable equal to 1; to remove it, set it to 0. The 
-color_base variables set the number of dice in the pool.
+alpha and will probably never leave it.
 
 To run this script, make sure you have Python 3 installed, then type 
 $ py path/to/script/py montecarlo.py on the command line.  It was written 
@@ -30,12 +27,8 @@ use C:\path\to\script\ for the instructions.
 menu, and type cmd.exe.  This will bring you to the command line.
 
 2. At the command prompt (which will look something like 
-C:\FolderName>), type:
-py C:\path\to\script\swam.py
-
-3. To change options, you currently need to edit the script directly.  
-To do this, open C:\path\to\script\swam.py in Notepad and follow 
-the directions at the top of the file.
+C:\FolderName>), to see the options, type:
+py C:\path\to\script\swam.py --help
 
 ---------------------
 LINUX
@@ -53,9 +46,8 @@ use /path/to/script/ for the instructions
 
 1. $ /path/to/script/swam.py 
 
-2. To change options, you currently need to edit the script directly.  
-To do this, open \path\to\script\montecarlo.py in nano or your favorite 
-text editor and follow the directions at the top of the file.
+2. To change options, type:
+$ ./swam.py --help
 
 ---------------------
 MAC
