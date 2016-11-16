@@ -1,4 +1,4 @@
-#!/usr/bin/python3.4
+#!/usr/bin/python3
 #!/python
 
 '''To run this script, make sure you have Python 3 installed, then type
@@ -16,21 +16,21 @@ it to 0.  The color_base variables set the number of dice in the pool.
 The  die number-to-facing translation I'm using is:
 
 BLACK
-1-2		Blank
-3-6		Hit
-7-8		Hit/Crit
+1-2        Blank
+3-6        Hit
+7-8        Hit/Crit
 
 BLUE
-1-2		Accuracy
-3-6		Hit
-7-8		Crit
+1-2        Accuracy
+3-6        Hit
+7-8        Crit
 
 RED
-1-2		Blank
-3		Accuracy
-4-5		Hit
-6-7		Crit
-8		Double
+1-2        Blank
+3        Accuracy
+4-5        Hit
+6-7        Crit
+8        Double
 '''
 
 from random import *
@@ -43,7 +43,7 @@ configs = {}
 
 #####OPTIONS (Set to 1 for yes, 0 for no)#####
 
-configs["conf_file"]=False			# use a config file
+configs["conf_file"]=False          # use a config file
 configs["tries"]=100000             # how many iterations to try
 configs["acc_target"]=1             # how many accuracies to shoot for per shot
 configs["distance"]=0               # range: 0 for close, 1 for medium, 2 for long
@@ -56,7 +56,7 @@ configs["ackbar"]=0                 # Ackbar?
 configs["cf"]=0                     # Concentrate fire?
 configs["leading_shots"]=0          # LS?
 configs["oe"]=0                     # OE?
-configs["salvation"]=0             # Salvation?
+configs["salvation"]=0              # Salvation?
 configs["screed"]=0                 # Screed?
 configs["trc"]=0                    # TRC?
 configs["vader"]=0                  # Vader?
@@ -68,7 +68,7 @@ configs["dist_override_blue"]=0     # Distance override for blues (e.g., Defianc
 def soDumb():
     print("Try swam.py --help for help.")
     exit()
-    
+
 def accept_args(args_list,import_configs):
     for arg in enumerate(args_list):
         if ("--help" in str(arg[1])) or (str(arg[1])=="-h"):
@@ -101,12 +101,12 @@ def accept_args(args_list,import_configs):
             print("Last update: 24 Jun 2016\n")
             print("Written by: Ardaedhel")
             exit()
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
         elif "--iter" in str(arg[1]):
             try: import_configs["tries"]=\
                 int((str(arg[1]).split("=",1))[1])
@@ -115,7 +115,7 @@ def accept_args(args_list,import_configs):
             try: import_configs["tries"]=\
                 int(str(args_list[arg[0]+1]))
             except: soDumb()
-            
+
         elif "--accuracies" in str(arg[1]):
             try: import_configs["acc_target"]=\
                 int((str(arg[1]).split("=",1))[1])
@@ -124,7 +124,7 @@ def accept_args(args_list,import_configs):
             try: import_configs["acc_target"]=\
                 int(str(args_list[arg[0]+1]))
             except: soDumb()
-            
+
         elif "--iter" in str(arg[1]):
             try: import_configs["tries"]=\
                 int((str(arg[1]).split("=",1))[1])
@@ -133,9 +133,9 @@ def accept_args(args_list,import_configs):
             try: import_configs["tries"]=\
                 int(str(args_list[arg[0]+1]))
             except: soDumb()
-            
+
         elif "--range" in str(arg[1]):
-            try: 
+            try:
                 if str(arg[1]).split("=",1) == "close":
                     import_configs["distance"]=0
                 elif str(arg[1]).split("=",1) == "medium":
@@ -144,7 +144,7 @@ def accept_args(args_list,import_configs):
                     import_configs["distance"]=2
             except: soDumb()
         elif "-r" == str(arg[1]):
-            try: 
+            try:
                 if str(args_list[arg[0]+1]) == "close":
                     import_configs["distance"]=0
                 elif str(args_list[arg[0]+1]) == "medium":
@@ -152,7 +152,7 @@ def accept_args(args_list,import_configs):
                 elif str(args_list[arg[0]+1]) == "long":
                     import_configs["distance"]=2
             except: soDumb()
-            
+
         elif "--blacks" in str(arg[1]):
             try: import_configs["black_base"]=\
                 int((str(arg[1]).split("=",1))[1])
@@ -161,7 +161,7 @@ def accept_args(args_list,import_configs):
             try: import_configs["black_base"]=\
                 int(str(args_list[arg[0]+1]))
             except: soDumb()
-            
+
         elif "--blues" in str(arg[1]):
             try: import_configs["blue_base"]=\
                 int((str(arg[1]).split("=",1))[1])
@@ -170,7 +170,7 @@ def accept_args(args_list,import_configs):
             try: import_configs["blue_base"]=\
                 int(str(args_list[arg[0]+1]))
             except: soDumb()
-            
+
         elif "--reds" in str(arg[1]):
             try: import_configs["red_base"]=\
                 int((str(arg[1]).split("=",1))[1])
@@ -179,13 +179,13 @@ def accept_args(args_list,import_configs):
             try: import_configs["red_base"]=\
                 int(str(args_list[arg[0]+1]))
             except: soDumb()
-            
+
         '''
         binary (yes or no) options:
         this list ties all command line flags (item[0]) to their
         associated variable
         '''
-        
+
         nonbinary_options = [
             ("--ackbar","ackbar"),
             ("-ab","ackbar"),
@@ -212,12 +212,12 @@ def accept_args(args_list,import_configs):
             ("--blue_override","dist_override_blue"),
             ("-ue","dist_override_blue")
             ]
-            
+
         for args_set in nonbinary_options:
             if str(arg[1]) == str(args_set[0]): import_configs[str(args_set[1])]=1
-            
+
     return import_configs
-    
+
 # Read in arguments from command line
 
 configs = accept_args(sys.argv,configs)
@@ -284,19 +284,19 @@ for x in range(tries):
     accuracies=0
     if trc: trc_available=1
     else: trc_available=0
-    
+
     #initial dice pool
 
     blacks=[]
     if distance==0 or dist_override_black:
         for die in range(black_base):
             blacks.append(ceil(random()*8))
-            
+
     blues=[]
     if distance<=1 or dist_override_blue:
         for die in range(blue_base):
             blues.append(ceil(random()*8))
-            
+
     reds=[]
     for die in range(red_base):
         reds.append(ceil(random()*8))
@@ -308,42 +308,42 @@ for x in range(tries):
     if (acm or apt):
         for x in blacks:
             if x > 6: crit=1
-            
+
         if cf and not crit:
             blacks.append(ceil(random()*8))
             cf_spent=1
-            
+
     #OE reroll logic
 
     if oe:
-    
+
         # roll aggressively if we have Vader as a backup
         if vader:
             for black in enumerate(blacks):
                 if black[1] < 7:
                     blacks[black[0]]=ceil(random()*8)
-                    
+
         # roll aggressively if we have Screed and enough dice to burn
         elif (screed and (len(blacks) + len(blues) + len(reds) >1)):
             for black in enumerate(blacks):
                 if black[1] < 7:
                     blacks[black[0]]=ceil(random()*8)
-                    
+
         else:
             for x in blacks:
                 if x > 6: crit=1
 
-            # roll aggressively if we have to fish for crits                
+            # roll aggressively if we have to fish for crits
             if (acm or apt) and not crit:
                 for black in enumerate(blacks):
                     blacks[black[0]]=ceil(random()*8)
-                    
+
             else:
                 for black in enumerate(blacks):
                     if black[1] < 3:
                         blacks[black[0]]=ceil(random()*8)
 
-        
+
     ###BLUES###
 
     #Check reds and blues for acccuracies
@@ -355,16 +355,16 @@ for x in range(tries):
         if die==3:
             accuracy=1
             accuracies+=1
-            
+
     #CF to fish for an acc if not enough
     if cf and not cf_spent and (accuracies < acc_target):
         blues.append(ceil(random()*8))
 
-            
+
     ###REDS###
 
     #Vader
-    
+
     #If we don't have LS, reroll more conservatively
     if vader and not leading_shots:
         for red in enumerate(reds):
@@ -375,7 +375,7 @@ for x in range(tries):
             elif (red[1] == 3) and (accuracies >= acc_target):  # Reroll acc if
                 reds[red[0]]=ceil(random()*8)                   # more showing
                 accuracies-=1                                   # than wanted
-                
+
     #If we have LS, fish for doubles
     elif vader and leading_shots and blues:
         for red in enumerate(reds):
@@ -386,24 +386,24 @@ for x in range(tries):
             elif (red[1] == 3) and (accuracies >= acc_target):
                 reds[red[0]]=ceil(random()*8)
                 accuracies -= 1
-    
+
     #LS
     if leading_shots:
         if (accuracies - acc_target) > 0:
             blanks = accuracies - acc_target
         else: blanks = 0
-        
+
         for die in reds:
             if die < 4:
                 blanks += 1
-        
+
         crit = 0
         for die in blacks:
             if die < 3:
                 blanks += 1
             if die > 6:
                 crit = 1
-                    
+
         if ((blanks >= 2) or ((apt or acm) and not crit)):
             ls_burned = 0
             if accuracies > acc_target:
@@ -420,7 +420,7 @@ for x in range(tries):
             if not ls_burned and blues:
                 del blues[0]
                 ls_burned = 1
-            
+
             if ls_burned:
                 for die in enumerate(blues):
                     if ((accuracies > acc_target) and (die[1] < 3)):
@@ -437,27 +437,27 @@ for x in range(tries):
                 if (acm or apt) and not crit:
                     for black in enumerate(blacks):
                         blacks[black[0]]=ceil(random()*8)
-                        
+
                 else:
                     for black in enumerate(blacks):
                         if black[1] < 3:
                             blacks[black[0]]=ceil(random()*8)
-    
+
     #TRC
     if trc_available:
-    
+
         #look for a blank to flip
         for red in enumerate(reds):
             if trc_available and (red[1] < 3):
                 reds[red[0]]=8
                 trc_available=0
-                
+
         #look for a single to reroll
         for red in enumerate(reds):
             if (red[1] > 3) and (red[1] < 8) and trc_available:
                 reds[red[0]]=8
                 trc_available=0
-                
+
         #look for an acc to reroll if there is another one showing OR
         #the total showing damage is 1 or less
         dmg_showing = 0
@@ -476,45 +476,45 @@ for x in range(tries):
                 accuracies-=1
 
 
-                        
+
     #Black damage total
     crit=0
     for x in blacks:
         if x > 6: crit=1
-    
+
     if not crit:
         fails+=1
-        
+
     for die in blacks:
         if die > 6: damage += 2
         elif die > 2: damage += 1
-                
-    #Blue damage total   
+
+    #Blue damage total
     for die in blues:
         if die > 2: damage += 1
         else:
             accuracy=1
-                
+
     #Red damage total
     for die in reds:
         if die > 7: damage += 2
         elif (die > 5) and salvation: damage += 2
         elif die > 3: damage += 1
-        elif die == 3: 
+        elif die == 3:
             accuracy=1
-                
+
     ###THE REST OF CF###
     if (len(reds) > 0 ) and trc_available and crit and cf and not cf_spent:
         reds.append(2)
         damage += 2
         cf_spent = 1
         trc_availabe = 0
-        
+
     elif cf and not cf_spent:
         cf_black = ceil(random()*8)
         #if cf_black < 3:               #Audit: Not sure why I gave the black
         #   cf_black = ceil(random()*8) #CF a free reroll here...
-        
+
         if cf_black > 6:
             crit = 1
             damage += 2
@@ -522,21 +522,21 @@ for x in range(tries):
             damage += 1
         blacks.append(cf_black)
 
-    ###FINALIZE EACH ITERATION###        
-        
+    ###FINALIZE EACH ITERATION###
+
     if acm and crit: damage += 2
     if apt and crit: damage += 1
-    
+
     if accuracies >= acc_target:
         accuracies_overall+=1
     damage_overall+=damage
     fails_overall+=fails
-    
+
     if tries==1:
         print("Blacks:",blacks,"\nBlues:",blues,"\nReds:",reds)
-        
+
     #Did it one-shot a CR90?
-    
+
     if distance == 0:    # close range
         if not accuracy:
             if acm: damage-=1
@@ -546,9 +546,9 @@ for x in range(tries):
             if acm: damage-=2
             if damage >= 6:
                 cr90s_killed += 1
-                
+
     #Did it one-shot a Raider?
-    
+
     if distance == 0:    # close range
         if not accuracy:
             if acm: damage-=2
@@ -560,11 +560,11 @@ for x in range(tries):
             if acm: damage-=2
             if damage >= 6:
                 raiders_killed += 1
-        
+
 if (acm or apt):
     print(str(tries-fails_overall)+" black crits of "+str(tries)+" tries. \n"+
           str((tries-fails_overall/tries)+" ACM/APT success rate."))
-          
+
 print(str(damage_overall/tries)+" average damage.")
 print(str(round(100*accuracies_overall/tries,2))+"% of rolls hit accuracy target.")
 print(str(round(100*cr90s_killed/tries,2))+"% of CR90's one-shotted.")
